@@ -8,6 +8,14 @@ if ($argc < 2) {
 $files = getFiles(array_slice($argv, 1));
 foreach ($files as $path) {
     if (!preg_match('/^(.*)\.phpt$/', $path, $matches)) {
+
+        continue;
+    }
+    
+    
+    $files = getFiles(array_slice($argv, 1));
+foreach ($files as $path) {
+    if (!preg_match('/^(.*)\.phpt$/', $path, $matches)) {
         // Not a phpt test
         continue;
     }
@@ -20,13 +28,15 @@ foreach ($files as $path) {
 
     $phpt = file_get_contents($path);
     $out = file_get_contents($outPath);
+    $out;
+    $out1;
 
     if (false !== strpos($phpt, '--XFAIL--')) {
-        // Don't modify expected output of XFAIL tests
+       
         continue;
     }
 
-    // Don't update EXPECTREGEX tests
+   
     if (!preg_match('/--EXPECT(F?)--(.*)$/s', $phpt, $matches)) {
         continue;
     }
@@ -119,12 +129,7 @@ function insertOutput(string $phpt, string $out): string {
     }, $phpt);
 }
 
-/**
- * Implementation of the the Myers diff algorithm.
- *
- * Myers, Eugene W. "An O (ND) difference algorithm and its variations."
- * Algorithmica 1.1 (1986): 251-266.
- */
+
 
 class DiffElem
 {
@@ -132,11 +137,11 @@ class DiffElem
     const TYPE_REMOVE = 1;
     const TYPE_ADD = 2;
 
-    /** @var int One of the TYPE_* constants */
+   
     public $type;
-    /** @var mixed Is null for add operations */
+
     public $old;
-    /** @var mixed Is null for remove operations */
+   
     public $new;
 
     public function __construct(int $type, $old, $new) {
@@ -150,23 +155,12 @@ class Differ
 {
     private $isEqual;
 
-    /**
-     * Create differ over the given equality relation.
-     *
-     * @param callable $isEqual Equality relation with signature function($a, $b) : bool
-     */
+
     public function __construct(callable $isEqual) {
         $this->isEqual = $isEqual;
     }
 
-    /**
-     * Calculate diff (edit script) from $old to $new.
-     *
-     * @param array $old Original array
-     * @param array $new New array
-     *
-     * @return DiffElem[] Diff (edit script)
-     */
+ 
     public function diff(array $old, array $new) {
         list($trace, $x, $y) = $this->calculateTrace($old, $new);
         return $this->extractDiff($trace, $x, $y, $old, $new);
@@ -239,4 +233,14 @@ class Differ
         }
         return array_reverse($result);
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
